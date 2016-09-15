@@ -10,6 +10,7 @@ public class ManagerProperties {
     private String password;
     private String platformId;
     private String jobName;
+    private String jobId;
     private String jobType;
     private String jobCategory;
     private String jarName;
@@ -48,12 +49,30 @@ public class ManagerProperties {
         return this;
     }
 
+    public String getPlatformId() {
+        return platformId;
+    }
+
+    public ManagerProperties setPlatformId(String platformId) {
+        this.platformId = platformId;
+        return this;
+    }
+
     public String getJobName() {
         return jobName;
     }
 
     public ManagerProperties setJobName(String jobName) {
         this.jobName = jobName;
+        return this;
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public ManagerProperties setJobId(String jobId) {
+        this.jobId = jobId;
         return this;
     }
 
@@ -72,15 +91,6 @@ public class ManagerProperties {
 
     public ManagerProperties setJobCategory(String jobCategory) {
         this.jobCategory = jobCategory;
-        return this;
-    }
-
-    public String getPlatformId() {
-        return platformId;
-    }
-
-    public ManagerProperties setPlatformId(String platformId) {
-        this.platformId = platformId;
         return this;
     }
 
@@ -136,6 +146,7 @@ public class ManagerProperties {
                 ", login='" + login + '\'' +
                 ", platformId='" + platformId + '\'' +
                 ", jobName='" + jobName + '\'' +
+                ", jobId='" + jobId + '\'' +
                 ", jobType='" + jobType + '\'' +
                 ", jobCategory='" + jobCategory + '\'' +
                 ", jarName='" + jarName + '\'' +

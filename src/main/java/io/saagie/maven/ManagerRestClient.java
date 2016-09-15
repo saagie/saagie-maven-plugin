@@ -6,12 +6,14 @@ import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.xml.bind.DatatypeConverter;
@@ -55,7 +57,7 @@ public class ManagerRestClient {
         return new RestTemplate(requestFactory);
     }
 
-    public void checkManagerConnection() {
+    public void checkManagerConnection() throws MojoExecutionException {
         log.debug("Check Manager Connection ... ");
 
         ResponseEntity<String> response = restTemplate.exchange(create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId()),
@@ -65,13 +67,13 @@ public class ManagerRestClient {
                                                                 String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
             log.error("Error during check Manager Connection (ErrorCode : " + response.getStatusCode() + " )");
-            return;
+            throw new MojoExecutionException("Error during check SaagieManager connection");
         }
         log.info("Connection to Manager : OK");
     }
 
 
-    public String uploadFile(String directory, String path) throws URISyntaxException, IOException {
+    public String uploadFile(String directory, String path) throws URISyntaxException, IOException, MojoExecutionException {
         log.debug("  >> Upload File ... ");
 
         MultiValueMap<String, Object> multipartMap = new LinkedMultiValueMap<>();
@@ -83,7 +85,7 @@ public class ManagerRestClient {
 
         if (!response.getStatusCode().is2xxSuccessful()) {
             log.error("Error during upload file (ErrorCode : " + response.getStatusCode() + " )");
-            return null;
+            throw new MojoExecutionException("Error during jar upload");
         }
 
         FileName fielName = gson.fromJson(response.getBody(), FileName.class);
@@ -91,7 +93,7 @@ public class ManagerRestClient {
         return fielName.getFileName();
     }
 
-    public Integer createJob(String body) {
+    public Integer createJob(String body) throws MojoExecutionException {
         log.debug("  >> Create Job ... ");
         ResponseEntity<String> response = restTemplate.exchange(
                 create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId() + "/job"),
@@ -99,13 +101,62 @@ public class ManagerRestClient {
                 new HttpEntity<String>(body, createHeaders()),
                 String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
-            log.error("Error during upload file (ErrorCode : " + response.getStatusCode() + " )");
-            return null;
+            log.error("Error during create job(ErrorCode : " + response.getStatusCode() + " )");
+            throw new MojoExecutionException("Error during the job creation");
         }
         Job job = gson.fromJson(response.getBody(), Job.class);
         return job.getId();
     }
 
+
+    public Job checkJobExists() throws MojoExecutionException {
+        log.debug("Check Job {" + managerProperties.getJobId() + "} Exists ... ");
+
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.exchange(create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId() + "/job/" + managerProperties.getJobId()),
+                                             HttpMethod.GET,
+                                             new HttpEntity<String>(
+                                                     createHeaders()),
+                                             String.class);
+        } catch (HttpClientErrorException e) {
+            log.error("Error during check Job Exists {id:" + managerProperties.getJobId() + "}");
+            throw new MojoExecutionException("Error during existing job validation");
+        }
+        Job job = gson.fromJson(response.getBody(), Job.class);
+        if (job != null &&
+                managerProperties.getJobName().equals(job.getName()) &&
+                managerProperties.getJobCategory().equals(job.getCategory())) {
+            log.info("Job {id:" + managerProperties.getJobId() +
+                             ", name:" + managerProperties.getJobName() +
+                             ", category:" + managerProperties.getJobCategory() +
+                             "} exists");
+        } else {
+            log.error("Error, the job don't correspond : Requested : {id:" + managerProperties.getJobId() +
+                              ", name:" + managerProperties.getJobName() +
+                              ", category:" + managerProperties.getJobCategory() +
+                              "} - In platform : {id:" + job.getId() +
+                              ", name:" + job.getName() +
+                              ", category:" + job.getCategory() +
+                              "}");
+            throw new MojoExecutionException("Error during existing job validation");
+        }
+        return job;
+    }
+
+    public void updateJob(Job job) throws MojoExecutionException {
+        log.debug("  >> Update Job ... ");
+        String body = gson.toJson(job);
+        ResponseEntity<String> response = restTemplate.exchange(
+                create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId() + "/job/" + managerProperties.getJobId() + "/version"),
+                HttpMethod.POST,
+                new HttpEntity<String>(body, createHeaders()),
+                String.class);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            log.error("Error during update job(ErrorCode : " + response.getStatusCode() + " )");
+            throw new MojoExecutionException("Error during the job update");
+        }
+    }
 
     private HttpHeaders createHeaders() {
         return new HttpHeaders() {
@@ -136,8 +187,9 @@ public class ManagerRestClient {
 
     class Job {
         private Integer id;
-        private String status;
-        private String subDomain;
+        private String name;
+        private String category;
+        private Current current;
 
         public Job() {
         }
@@ -151,22 +203,98 @@ public class ManagerRestClient {
             return this;
         }
 
-        public String getStatus() {
-            return status;
+        public String getName() {
+            return name;
         }
 
-        public Job setStatus(String status) {
-            this.status = status;
+        public Job setName(String name) {
+            this.name = name;
             return this;
         }
 
-        public String getSubDomain() {
-            return subDomain;
+        public String getCategory() {
+            return category;
         }
 
-        public Job setSubDomain(String subDomain) {
-            this.subDomain = subDomain;
+        public Job setCategory(String category) {
+            this.category = category;
             return this;
+        }
+
+        public Current getCurrent() {
+            return current;
+        }
+
+        public Job setCurrent(Current current) {
+            this.current = current;
+            return this;
+        }
+
+        class Current {
+            private Integer id;
+            private Integer job_id;
+            private Integer number;
+            private String template;
+            private String file;
+            private String creation_date;
+
+            public Current() {
+            }
+
+            public Integer getId() {
+                return id;
+            }
+
+            public Current setId(Integer id) {
+                this.id = id;
+                return this;
+            }
+
+            public Integer getJob_id() {
+                return job_id;
+            }
+
+            public Current setJob_id(Integer job_id) {
+                this.job_id = job_id;
+                return this;
+            }
+
+            public Integer getNumber() {
+                return number;
+            }
+
+            public Current setNumber(Integer number) {
+                this.number = number;
+                return this;
+            }
+
+            public String getTemplate() {
+                return template;
+            }
+
+            public Current setTemplate(String template) {
+                this.template = template;
+                return this;
+            }
+
+            public String getFile() {
+                return file;
+            }
+
+            public Current setFile(String file) {
+                this.file = file;
+                return this;
+            }
+
+            public String getCreation_date() {
+                return creation_date;
+            }
+
+            public Current setCreation_date(String creation_date) {
+                this.creation_date = creation_date;
+                return this;
+            }
         }
     }
+
 }

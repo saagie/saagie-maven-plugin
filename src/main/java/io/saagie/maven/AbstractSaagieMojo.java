@@ -56,6 +56,11 @@ abstract class AbstractSaagieMojo extends AbstractMojo {
     @Parameter(property = "jobType", readonly = true, required = true, defaultValue = "java-scala")
     String jobType;
     /**
+     * The id of the job (only for update)
+     */
+    @Parameter(property = "jobId", readonly = true, required = false)
+    String jobId;
+    /**
      * The name of the jar
      */
     @Parameter(property = "jarName", readonly = true, required = true, defaultValue = "${project.build.finalName}-jar-with-dependencies.jar")
@@ -106,6 +111,7 @@ abstract class AbstractSaagieMojo extends AbstractMojo {
                 .setJobName(jobName)
                 .setJobCategory(jobCategory)
                 .setJobType(jobType)
+                .setJobId(jobId)
                 .setJarName(jarName)
                 .setCpu(cpu)
                 .setMem(mem)
