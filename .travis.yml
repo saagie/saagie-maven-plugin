@@ -3,16 +3,6 @@ language: java
 jdk:
   - oraclejdk7
 
-env:
-  global:
-    - SONATYPE_USERNAME=mattbrownspotify
-    - secure: "WNbRYgvYFZkOr4zYQFE9et7F7zpeNZ0wspWl4euFWaaDANodYAdCiyIaCb2Gmlk68Ow2PqMNhBzYE5eDr0bDItheWqjtV2JMgu7LG6a2o2SUuhc/3ML2xFuPeh8Ca3GMfsFlTNJvE35eZwFn62n6RSo/AGcr+lBOwffs2EmKP9DaLp+Eb+ASD/EgJdAldyoi9GAlvE+Q12vwT94W7OwDW75qXuU1D8MtJoMRVUr4zsNhqLDm1ubKFJkdVbsKD8Av0Z3OhQd8twvfGSzQELCsD2TPamn7z7j2JGiOKHIjJKjRyCbKT3hKSusvQhO2j/3POwtkQ06VKvYX/Iso1EKkgl4rVKeTrENpsRWFpHxaAGvdr71WHu+V4GYuI8DFYQst0mbeo8wwCQ40m/HybjU9JRpcwJ/3s84piTXVFeTgWjHWy0XWW1ufqnaiz9DT68vUuXe0Hpa/SXkHzaaWzozQUB2M5L8TWjDXSx74IgJJ/mMYp029x+Znv8xMND/qACtKPmEQ/KmS2LqdBiiv+pNzQQDKy0eU0QchBsLW3Ci4tvFCw8ANxb0c2OQhltnC563lx3fwhUlHVf4D6zrkR13r/7iQqdVCPpfSH/rjuju/xZqaI+SYNTl/vtWj/1zjZ2IxpvyodCtCW+3kHuTsdCVoXDeKZpTb68iQ/5WenH8hbqE="
-
-branches:
-  only:
-    - master
-
-
 after_success:
   # deploy snapshots to Maven central, but only from master branch
   - "[[ $TRAVIS_BRANCH == \"master\" ]] && mvn -s sonatype-settings.xml deploy"
