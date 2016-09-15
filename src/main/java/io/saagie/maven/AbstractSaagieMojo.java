@@ -80,6 +80,7 @@ abstract class AbstractSaagieMojo extends AbstractMojo {
      */
     @Parameter(property = "mem", readonly = true, required = true, defaultValue = "512")
     String mem;
+    ManagerProperties managerProperties = new ManagerProperties();
     @Component
     private Settings settings;
     @Component(role = SecDispatcher.class, hint = "mng-4384")
@@ -91,6 +92,29 @@ abstract class AbstractSaagieMojo extends AbstractMojo {
     @Parameter(property = "serverId", readonly = true, required = true, defaultValue = "saagie-manager")
     private String serverId;
 
+    /**
+     * Load properties and generate ManagerProperties
+     */
+    protected void loadProperties() {
+        getLog().info("Start Saagie Maven Plugin");
+
+        managerProperties
+                .setUrlApi(urlApi)
+                .setLogin(login)
+                .setPassword(password)
+                .setPlatformId(platformId)
+                .setJobName(jobName)
+                .setJobCategory(jobCategory)
+                .setJobType(jobType)
+                .setJarName(jarName)
+                .setCpu(cpu)
+                .setMem(mem)
+                .setDisk(disk)
+                .setLanguageVersion(languageVersion);
+
+
+        getLog().debug("ManagerProperties : " + managerProperties);
+    }
 
     /**
      * Get Login/password from settings.xml / server
@@ -110,6 +134,14 @@ abstract class AbstractSaagieMojo extends AbstractMojo {
                 managerProperties.setPassword(password);
             }
         }
+    }
 
+    /**
+     * Generate URL of the job
+     *
+     * @param jobId
+     */
+    protected String generateURLJob(Integer jobId) {
+        return managerProperties.getUrlApi().replace("/api/v1", "/#/manager/" + managerProperties.getPlatformId() + "/job/" + jobId);
     }
 }

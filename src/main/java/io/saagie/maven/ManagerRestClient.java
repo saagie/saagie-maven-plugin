@@ -56,7 +56,7 @@ public class ManagerRestClient {
     }
 
     public void checkManagerConnection() {
-        log.info("Check Manager Connection ... ");
+        log.debug("Check Manager Connection ... ");
 
         ResponseEntity<String> response = restTemplate.exchange(create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId()),
                                                                 HttpMethod.GET,
@@ -72,7 +72,7 @@ public class ManagerRestClient {
 
 
     public String uploadFile(String directory, String path) throws URISyntaxException, IOException {
-        log.info("  >> Upload File ... ");
+        log.debug("  >> Upload File ... ");
 
         MultiValueMap<String, Object> multipartMap = new LinkedMultiValueMap<>();
         multipartMap.add("file", new UrlResource(Paths.get(directory, path).toUri()));
@@ -87,11 +87,12 @@ public class ManagerRestClient {
         }
 
         FileName fielName = gson.fromJson(response.getBody(), FileName.class);
-        log.info("  >> Upload File OK (" + fielName.getFileName() + ")");
+        log.info("  >> Upload File OK");
         return fielName.getFileName();
     }
 
     public Integer createJob(String body) {
+        log.debug("  >> Create Job ... ");
         ResponseEntity<String> response = restTemplate.exchange(
                 create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId() + "/job"),
                 HttpMethod.POST,
