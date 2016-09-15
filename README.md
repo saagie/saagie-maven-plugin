@@ -1,4 +1,10 @@
-# saagie-maven-plugin
+# Saagie Maven Plugin
+
+ 
+[![Travis CI](https://travis-ci.org/spotify/docker-maven-plugin.svg?branch=master)](https://travis-ci.org/spotify/docker-maven-plugin/) 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.saagie/saagie-maven-plugin/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22saagie-maven-plugin%22)
+
+
 
 A Maven plugin to push jar in Saagie Manager and create a new java job (not available yet on maven central - soon)
 
@@ -31,7 +37,7 @@ In order for this to succeed, at least some parameters can be set.
         <plugin>
             <groupId>io.saagie</groupId>
             <artifactId>saagie-maven-plugin</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.2</version>
             <configuration>
                 <login>username</login>
                 <password>your-password</password>
@@ -52,7 +58,7 @@ Optionally, you can force the job create after the generation of the jar :
         <plugin>
             <groupId>io.saagie</groupId>
             <artifactId>saagie-maven-plugin</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.2</version>
             <configuration>
                 <login>username</login>
                 <password>your-password</password>
@@ -87,7 +93,7 @@ In order for this to succeed, at least some parameters can be set.
         <plugin>
             <groupId>io.saagie</groupId>
             <artifactId>saagie-maven-plugin</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.2</version>
             <configuration>
                 <login>username</login>
                 <password>your-password</password>
