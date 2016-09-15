@@ -1,6 +1,7 @@
 # Build products and artifacts
 .*
 !/.gitignore
+!/.travis.yml
 *.html
 .m2-repository/
 target/
