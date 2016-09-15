@@ -3,6 +3,6 @@ language: java
 jdk:
   - oraclejdk7
 
-after_success:
-  # deploy snapshots to Maven central, but only from master branch
-  - "[[ $TRAVIS_BRANCH == \"master\" ]] && mvn -s sonatype-settings.xml deploy"
+script:
+    - mvn clean install -B
+    - if [ "$TRAVIS_BRANCH" == "master" ] ; then mvn deploy  -B --settings sonatype-settings.xml ; fi
