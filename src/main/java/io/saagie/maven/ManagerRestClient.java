@@ -54,6 +54,7 @@ public class ManagerRestClient {
                 .setSSLSocketFactory(sslsf).build();
         requestFactory.setHttpClient(httpclient);
         requestFactory.setConnectTimeout(3000);
+        requestFactory.setReadTimeout(60 * 1000); //1 minute
         return new RestTemplate(requestFactory);
     }
 
