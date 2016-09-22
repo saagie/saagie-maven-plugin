@@ -74,7 +74,7 @@ public class ManagerRestClient {
 
 
     public String uploadFile(String directory, String path) throws URISyntaxException, IOException, MojoExecutionException {
-        log.debug("  >> Upload File ... ");
+        log.info("  >> Upload File ... ");
 
         MultiValueMap<String, Object> multipartMap = new LinkedMultiValueMap<>();
         multipartMap.add("file", new UrlResource(Paths.get(directory, path).toUri()));
@@ -94,12 +94,13 @@ public class ManagerRestClient {
     }
 
     public Integer createJob(String body) throws MojoExecutionException {
-        log.debug("  >> Create Job ... ");
+        log.info("  >> Create Job ... ");
         ResponseEntity<String> response = restTemplate.exchange(
                 create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId() + "/job"),
                 HttpMethod.POST,
                 new HttpEntity<String>(body, createHeaders()),
                 String.class);
+
         if (!response.getStatusCode().is2xxSuccessful()) {
             log.error("Error during create job(ErrorCode : " + response.getStatusCode() + " )");
             throw new MojoExecutionException("Error during the job creation");
