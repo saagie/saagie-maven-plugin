@@ -192,6 +192,10 @@ We recommand to use the authenticating mode using the settings.xml. It's more se
   - default value : 8
   - Only 8 or 7 are available (See [anapsix/alpine-java](https://hub.docker.com/r/anapsix/alpine-java/) to see the precise version of java we use). 
 
+* **arguments**
+  - represents the arguments in the the job command-line.
+  - default value : Empty-String
+
 * **jobType**
   - represents the type of job you want to create
   - default value : "java-scala"
