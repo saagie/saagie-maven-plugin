@@ -85,6 +85,14 @@ abstract class AbstractSaagieMojo extends AbstractMojo {
      */
     @Parameter(property = "mem", readonly = true, required = true, defaultValue = "512")
     String mem;
+
+    /**
+     * The arguments in the job command line
+     */
+    @Parameter(property = "arguments", readonly = true, required = false, defaultValue = " ")
+    String arguments;
+
+
     ManagerProperties managerProperties = new ManagerProperties();
     @Component
     private Settings settings;
@@ -116,6 +124,7 @@ abstract class AbstractSaagieMojo extends AbstractMojo {
                 .setCpu(cpu)
                 .setMem(mem)
                 .setDisk(disk)
+                .setArguments(arguments)
                 .setLanguageVersion(languageVersion);
 
 

@@ -18,6 +18,7 @@ public class ManagerProperties {
     private String cpu;
     private String mem;
     private String disk;
+    private String arguments;
 
     public ManagerProperties() {
     }
@@ -139,6 +140,15 @@ public class ManagerProperties {
         return this;
     }
 
+    public String getArguments() {
+        return arguments;
+    }
+
+    public ManagerProperties setArguments(String arguments) {
+        this.arguments = arguments;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "ManagerProperties{" +
@@ -154,6 +164,7 @@ public class ManagerProperties {
                 ", cpu='" + cpu + '\'' +
                 ", mem='" + mem + '\'' +
                 ", disk='" + disk + '\'' +
+                ", arguments='" + arguments + '\'' +
                 '}';
     }
 }
