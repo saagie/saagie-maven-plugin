@@ -37,7 +37,7 @@ In order for this to succeed, at least some parameters can be set.
         <plugin>
             <groupId>io.saagie</groupId>
             <artifactId>saagie-maven-plugin</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
             <configuration>
                 <login>username</login>
                 <password>your-password</password>
@@ -58,7 +58,7 @@ Optionally, you can force the job create after the generation of the jar :
         <plugin>
             <groupId>io.saagie</groupId>
             <artifactId>saagie-maven-plugin</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
             <configuration>
                 <login>username</login>
                 <password>your-password</password>
@@ -93,7 +93,7 @@ In order for this to succeed, at least some parameters can be set.
         <plugin>
             <groupId>io.saagie</groupId>
             <artifactId>saagie-maven-plugin</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
             <configuration>
                 <login>username</login>
                 <password>your-password</password>
