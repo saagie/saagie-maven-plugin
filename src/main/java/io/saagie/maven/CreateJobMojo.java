@@ -19,9 +19,33 @@ public class CreateJobMojo extends AbstractSaagieMojo {
             managerRestClient.checkManagerConnection();
             String directory = project.getBuild().getDirectory();
             String filename = managerRestClient.uploadFile(directory, managerProperties.getJarName());
-            String body = "{\"platform_id\":\"" + managerProperties.getPlatformId() + "\",\"capsule_code\":\"" + managerProperties.getJobType() + "\",\"category\":\"" + managerProperties.getJobCategory() + "\",\"current\":{\"template\":\"java -jar {file} "+managerProperties.getArguments()+"\",\"file\":\"" + filename + "\"},\"options\":{\"language_version\":\"" + managerProperties.getLanguageVersion() + "\"},\"cpu\":" + managerProperties.getCpu() + ",\"memory\":" + managerProperties.getMem() + ",\"disk\":" + managerProperties.getDisk() + ",\"manual\":true,\"name\":\"" + managerProperties.getJobName() + "\",\"retry\":\"\",\"schedule\":\"R0/2016-07-06T15:47:52.051Z/P0Y0M1DT0H0M0S\"}";
+            String body = "{" +
+                    "\"platform_id\": \"" + managerProperties.getPlatformId() + "\", " +
+                    "\"always_email\": false" + ", " +
+                    "\"capsule_code\": \"" + managerProperties.getJobType() + "\", " +
+                    "\"category\": \"" + managerProperties.getJobCategory() + "\", " +
+                    "\"current\": {" +
+                    "   \"cpu\": " + managerProperties.getCpu() + ", " +
+                    "   \"disk\": " + managerProperties.getDisk() + ", " +
+                    "   \"memory\": " + managerProperties.getMem() + ", " +
+                    "   \"file\": \"" + filename + "\", " +
+                    "   \"template\": \"" + generateJobTemplate(managerProperties.getArguments()) + "\", " +
+                    "   \"isInternalPort\": false, " +
+                    "   \"isInternalSubDomain\": false, " +
+                    "   \"options\": {" +
+                    "       \"language_version\": \"" + managerProperties.getLanguageVersion() + "\"" +
+                    "   }," +
+                    "   \"releaseNote\": \"" + managerProperties.getReleaseNote() + "\"" +
+                    "}," +
+                    "\"description\": \"" + managerProperties.getDescription() + "\", " +
+                    "\"manual\": true, " +
+                    "\"name\": \"" + managerProperties.getJobName() + "\", " +
+                    "\"retry\": \"\", " +
+                    "\"schedule\": \"R0/2016-07-06T15:47:52.051Z/P0Y0M1DT0H0M0S\"" +
+                    "}";
+            getLog().debug("  >> Job creation request body: " + body);
             Integer jobId = managerRestClient.createJob(body);
-            getLog().info("  >> Job created : " + generateURLJob(jobId));
+            getLog().info("  >> Job created : " + generateJobURL(jobId));
         } catch (Exception e) {
             getLog().error(e);
         }
