@@ -30,8 +30,6 @@ public class CreateJobMojo extends AbstractSaagieMojo {
                     "   \"memory\": " + managerProperties.getMem() + ", " +
                     "   \"file\": \"" + filename + "\", " +
                     "   \"template\": \"" + generateJobTemplate(managerProperties.getArguments()) + "\", " +
-                    "   \"isInternalPort\": false, " +
-                    "   \"isInternalSubDomain\": false, " +
                     "   \"options\": {" +
                     "       \"language_version\": \"" + managerProperties.getLanguageVersion() + "\"" +
                     "   }," +
