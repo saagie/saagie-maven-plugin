@@ -196,8 +196,8 @@ Setting those parameters will override default values.
 
 * **urlAPI**
   - represents the URL of your manager.
-  - default value : "https://realm-manager.prod.saagie.io/api/v1" where "realm" is automatically replaced by the value of the given "realm" parameter. (for Saagie Kumo)
-  - You can override this parameter if you use a Saagie Su (Appliance). Don't forget to add "**/api/v1**" at the end of the URL. In this case, the "realm" parameter will have no impact.
+  - default value : "https://realm-manager.prod.saagie.io/api/v1" where "realm" is automatically replaced by the value of the given "realm" parameter.
+  - If overriding this parameter, don't forget to add "**/api/v1**" at the end of the URL. In this case, the "realm" parameter will have no impact.
 
 * **jarName**
   - represents the name of the jar you want to upload
