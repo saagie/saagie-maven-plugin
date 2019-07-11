@@ -8,6 +8,7 @@ public class ManagerProperties {
     private String urlApi;
     private String login;
     private String password;
+    private String realm;
     private String platformId;
     private String jobName;
     private String jobId;
@@ -19,6 +20,8 @@ public class ManagerProperties {
     private String mem;
     private String disk;
     private String arguments;
+    private String releaseNote;
+    private String description;
 
     public ManagerProperties() {
     }
@@ -47,6 +50,15 @@ public class ManagerProperties {
 
     public ManagerProperties setPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public String getRealm() {
+        return realm;
+    }
+
+    public ManagerProperties setRealm(String realm) {
+        this.realm = realm;
         return this;
     }
 
@@ -149,11 +161,30 @@ public class ManagerProperties {
         return this;
     }
 
+    public String getReleaseNote() {
+        return releaseNote;
+    }
+
+    public ManagerProperties setReleaseNote(String releaseNote) {
+        this.releaseNote = releaseNote;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public ManagerProperties setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "ManagerProperties{" +
                 "urlApi='" + urlApi + '\'' +
                 ", login='" + login + '\'' +
+                ", realm='" + realm + '\'' +
                 ", platformId='" + platformId + '\'' +
                 ", jobName='" + jobName + '\'' +
                 ", jobId='" + jobId + '\'' +
@@ -165,6 +196,8 @@ public class ManagerProperties {
                 ", mem='" + mem + '\'' +
                 ", disk='" + disk + '\'' +
                 ", arguments='" + arguments + '\'' +
+                ", releaseNote='" + releaseNote + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }
