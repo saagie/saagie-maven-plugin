@@ -222,7 +222,7 @@ Setting those parameters will override default values.
 * **jobType**
   - represents the type of job you want to create
   - default value : "java-scala"
-  - for the moment, only "java-scala" works, but maybe in the future, more jobType will be available
+  - for the moment, only "java-scala" works
 
 * **releaseNote**
   - represents the release note of the job version.
