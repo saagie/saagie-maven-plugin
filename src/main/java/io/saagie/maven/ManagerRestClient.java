@@ -61,7 +61,7 @@ public class ManagerRestClient {
     public void checkManagerConnection() throws MojoExecutionException {
         log.debug("Check Manager Connection ... ");
 
-        ResponseEntity<String> response = restTemplate.exchange(create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId()),
+        ResponseEntity<String> response = restTemplate.exchange(create(getBaseApiUrl() + "/platform/" + managerProperties.getPlatformId()),
                                                                 HttpMethod.GET,
                                                                 new HttpEntity<String>(
                                                                         createHeaders()),
@@ -82,7 +82,7 @@ public class ManagerRestClient {
         HttpHeaders headers = createHeaders();
         headers.setContentType(new MediaType("multipart", "form-data"));
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(multipartMap, headers);
-        ResponseEntity<String> response = restTemplate.exchange(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId() + "/job/upload", HttpMethod.POST, request, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(getBaseApiUrl() + "/platform/" + managerProperties.getPlatformId() + "/job/upload", HttpMethod.POST, request, String.class);
 
         if (!response.getStatusCode().is2xxSuccessful()) {
             log.error("Error during upload file (ErrorCode : " + response.getStatusCode() + " )");
@@ -97,7 +97,7 @@ public class ManagerRestClient {
     public Integer createJob(String body) throws MojoExecutionException {
         log.info("  >> Create Job ... ");
         ResponseEntity<String> response = restTemplate.exchange(
-                create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId() + "/job"),
+                create(getBaseApiUrl() + "/platform/" + managerProperties.getPlatformId() + "/job"),
                 HttpMethod.POST,
                 new HttpEntity<String>(body, createHeaders()),
                 String.class);
@@ -116,7 +116,7 @@ public class ManagerRestClient {
 
         ResponseEntity<String> response = null;
         try {
-            response = restTemplate.exchange(create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId() + "/job/" + managerProperties.getJobId()),
+            response = restTemplate.exchange(create(getBaseApiUrl() + "/platform/" + managerProperties.getPlatformId() + "/job/" + managerProperties.getJobId()),
                                              HttpMethod.GET,
                                              new HttpEntity<String>(
                                                      createHeaders()),
@@ -150,7 +150,7 @@ public class ManagerRestClient {
         log.debug("  >> Update Job ... ");
         String body = gson.toJson(job);
         ResponseEntity<String> response = restTemplate.exchange(
-                create(managerProperties.getUrlApi() + "/platform/" + managerProperties.getPlatformId() + "/job/" + managerProperties.getJobId() + "/version"),
+                create(getBaseApiUrl() + "/platform/" + managerProperties.getPlatformId() + "/job/" + managerProperties.getJobId() + "/version"),
                 HttpMethod.POST,
                 new HttpEntity<String>(body, createHeaders()),
                 String.class);
@@ -158,6 +158,10 @@ public class ManagerRestClient {
             log.error("Error during update job(ErrorCode : " + response.getStatusCode() + " )");
             throw new MojoExecutionException("Error during the job update");
         }
+    }
+
+    private String getBaseApiUrl() {
+        return managerProperties.getUrlApi().replaceFirst("\\$\\{realm}", managerProperties.getRealm());
     }
 
     private HttpHeaders createHeaders() {
@@ -232,6 +236,29 @@ public class ManagerRestClient {
             return this;
         }
 
+        class Options {
+            private String language_version;
+
+            public Options() {
+            }
+
+            public String getLanguage_version() {
+                return language_version;
+            }
+
+            public Options setLanguage_version(String language_version) {
+                this.language_version = language_version;
+                return this;
+            }
+
+            @Override
+            public String toString() {
+                return "Options{" +
+                        "language_version='" + language_version + '\'' +
+                        '}';
+            }
+        }
+
         class Current {
             private Integer id;
             private Integer job_id;
@@ -239,6 +266,11 @@ public class ManagerRestClient {
             private String template;
             private String file;
             private String creation_date;
+            private Options options;
+            private String cpu;
+            private String memory;
+            private String disk;
+            private String releaseNote;
 
             public Current() {
             }
@@ -296,6 +328,78 @@ public class ManagerRestClient {
                 this.creation_date = creation_date;
                 return this;
             }
+
+            public Options getOptions() {
+                return options;
+            }
+
+            public Current setOptions(Options options) {
+                this.options = options;
+                return this;
+            }
+
+            public String getCpu() {
+                return cpu;
+            }
+
+            public Current setCpu(String cpu) {
+                this.cpu = cpu;
+                return this;
+            }
+
+            public String getMemory() {
+                return memory;
+            }
+
+            public Current setMemory(String memory) {
+                this.memory = memory;
+                return this;
+            }
+
+            public String getDisk() {
+                return disk;
+            }
+
+            public Current setDisk(String disk) {
+                this.disk = disk;
+                return this;
+            }
+
+            public String getReleaseNote() {
+                return releaseNote;
+            }
+
+            public Current setReleaseNote(String releaseNote) {
+                this.releaseNote = releaseNote;
+                return this;
+            }
+
+            @Override
+            public String toString() {
+                return "Current{" +
+                        "id=" + id +
+                        ", job_id=" + job_id +
+                        ", number=" + number +
+                        ", template='" + template + '\'' +
+                        ", file='" + file + '\'' +
+                        ", creation_date='" + creation_date + '\'' +
+                        ", options=" + options +
+                        ", cpu='" + cpu + '\'' +
+                        ", memory='" + memory + '\'' +
+                        ", disk='" + disk + '\'' +
+                        ", releaseNote='" + releaseNote + '\'' +
+                        '}';
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Job{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    ", category='" + category + '\'' +
+                    ", current=" + current +
+                    '}';
         }
     }
 
