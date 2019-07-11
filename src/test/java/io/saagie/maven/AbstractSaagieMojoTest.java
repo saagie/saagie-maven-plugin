@@ -125,7 +125,7 @@ public class AbstractSaagieMojoTest {
 
 
     @Test
-    public void should_load_credentials_not_encrypt() throws MojoExecutionException, MojoFailureException {
+    public void should_load_unencrypted_credentials() throws MojoExecutionException, MojoFailureException {
         //Given
         Server server = Mockito.mock(Server.class);
         SettingsDecryptionResult settingsDecryptionResult = Mockito.mock(SettingsDecryptionResult.class);
@@ -147,7 +147,7 @@ public class AbstractSaagieMojoTest {
     }
 
     @Test
-    public void should_load_credentials_encrypt() throws MojoExecutionException, MojoFailureException {
+    public void should_load_encrypted_credentials() throws MojoExecutionException, MojoFailureException {
         //Given
         Server server = Mockito.mock(Server.class);
         Server decryptedServer = Mockito.mock(Server.class);
