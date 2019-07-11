@@ -37,7 +37,7 @@ Here is the minimum required:
     <plugin>
         <groupId>io.saagie</groupId>
         <artifactId>saagie-maven-plugin</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
         <configuration>
             <login>my-username</login>
             <password>my-password</password>
@@ -65,7 +65,7 @@ Optionally, you can force a job creation after generating your project jar file,
     <plugin>
         <groupId>io.saagie</groupId>
         <artifactId>saagie-maven-plugin</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
         <configuration>
             <login>my-username</login>
             <password>my-password</password>
@@ -109,7 +109,7 @@ After you added (at least) the jobId to the plugin configuration:
     <plugin>
         <groupId>io.saagie</groupId>
         <artifactId>saagie-maven-plugin</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
         <configuration>
             <login>my-username</login>
             <password>my-password</password>
@@ -241,7 +241,7 @@ A fully customized configuration may look like this:
     <plugin>
         <groupId>io.saagie</groupId>
             <artifactId>saagie-maven-plugin</artifactId>
-            <version>1.0.4</version>
+            <version>1.0.5</version>
             <configuration>
                 <login>my-username</login>
                 <password>my-password</password>

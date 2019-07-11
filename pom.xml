@@ -7,7 +7,7 @@
 
   <groupId>io.saagie</groupId>
   <artifactId>saagie-maven-plugin</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>maven-plugin</packaging>
   <name>saagie-maven-plugin</name>
   <description>A maven plugin for saagie</description>
