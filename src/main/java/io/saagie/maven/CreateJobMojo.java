@@ -1,6 +1,7 @@
 package io.saagie.maven;
 
 import org.apache.maven.plugins.annotations.Mojo;
+import org.jetbrains.annotations.NotNull;
 
 import static org.apache.maven.plugins.annotations.ResolutionScope.COMPILE;
 
@@ -19,28 +20,18 @@ public class CreateJobMojo extends AbstractSaagieMojo {
             managerRestClient.checkManagerConnection();
             String directory = project.getBuild().getDirectory();
             String filename = managerRestClient.uploadFile(directory, managerProperties.getJarName());
-            String body = "{" +
-                    "\"platform_id\": \"" + managerProperties.getPlatformId() + "\", " +
-                    "\"always_email\": false" + ", " +
-                    "\"capsule_code\": \"" + managerProperties.getJobType() + "\", " +
-                    "\"category\": \"" + managerProperties.getJobCategory() + "\", " +
-                    "\"current\": {" +
-                    "   \"cpu\": " + managerProperties.getCpu() + ", " +
-                    "   \"disk\": " + managerProperties.getDisk() + ", " +
-                    "   \"memory\": " + managerProperties.getMem() + ", " +
-                    "   \"file\": \"" + filename + "\", " +
-                    "   \"template\": \"" + generateJobTemplate(managerProperties.getArguments()) + "\", " +
-                    "   \"options\": {" +
-                    "       \"language_version\": \"" + managerProperties.getLanguageVersion() + "\"" +
-                    "   }," +
-                    "   \"releaseNote\": \"" + managerProperties.getReleaseNote() + "\"" +
-                    "}," +
-                    "\"description\": \"" + managerProperties.getDescription() + "\", " +
-                    "\"manual\": true, " +
-                    "\"name\": \"" + managerProperties.getJobName() + "\", " +
-                    "\"retry\": \"\", " +
-                    "\"schedule\": \"R0/2016-07-06T15:47:52.051Z/P0Y0M1DT0H0M0S\"" +
-                    "}";
+            String body = requestBodyBuilder(managerProperties.getPlatformId(),
+                    managerProperties.getJobType(),
+                    managerProperties.getJobCategory(),
+                    managerProperties.getCpu(),
+                    managerProperties.getDisk(),
+                    managerProperties.getMem(),
+                    filename,
+                    generateJobTemplate(managerProperties.getArguments()),
+                    managerProperties.getLanguageVersion(),
+                    managerProperties.getReleaseNote(),
+                    managerProperties.getDescription(),
+                    managerProperties.getJobName());
             getLog().debug("  >> Job creation request body: " + body);
             Integer jobId = managerRestClient.createJob(body);
             getLog().info("  >> Job created : " + generateJobURL(jobId));
@@ -48,4 +39,34 @@ public class CreateJobMojo extends AbstractSaagieMojo {
             getLog().error(e);
         }
     }
+
+    @NotNull
+    private String requestBodyBuilder(String platformId, String objectType, String jobCategory,
+                                      String cpu, String disk, String memory, String filename, String args,
+                                      String languageVersion, String releaseNote, String description, String jobName) {
+        return "{" +
+                "\"platform_id\": \"" + platformId + "\", " +
+                "\"always_email\": false" + ", " +
+                "\"capsule_code\": \"" + objectType + "\", " +
+                "\"category\": \"" + jobCategory + "\", " +
+                "\"current\": {" +
+                "   \"cpu\": " + cpu + ", " +
+                "   \"disk\": " + disk + ", " +
+                "   \"memory\": " + memory + ", " +
+                "   \"file\": \"" + filename + "\", " +
+                "   \"template\": \"" + args + "\", " +
+                "   \"options\": {" +
+                "       \"language_version\": \"" + languageVersion + "\"" +
+                "   }," +
+                "   \"releaseNote\": \"" + releaseNote + "\"" +
+                "}," +
+                "\"description\": \"" + description + "\", " +
+                "\"manual\": true, " +
+                "\"name\": \"" + jobName + "\", " +
+                "\"retry\": \"\", " +
+                "\"schedule\": \"R0/2016-07-06T15:47:52.051Z/P0Y0M1DT0H0M0S\"" +
+                "}";
+    }
+
+
 }
