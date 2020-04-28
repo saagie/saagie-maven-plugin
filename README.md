@@ -1,5 +1,6 @@
 # Saagie Maven Plugin
 
+## :warning: This plugin is **deprecated**, no more maintained, and may contain some vulnerabilities. Provided as-is; use it at your own risk.
  
 [![Travis CI](https://travis-ci.org/spotify/docker-maven-plugin.svg?branch=master)](https://travis-ci.org/spotify/docker-maven-plugin/) 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.saagie/saagie-maven-plugin/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22saagie-maven-plugin%22)
